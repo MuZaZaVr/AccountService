@@ -1,5 +1,5 @@
 Mongo:
-  databaseName: accountservicedb
+  databaseName: account-service-db
   databaseDialect: mongodb
 
 HTTP:

@@ -1,16 +1,19 @@
 package repository
 
 import (
+	"context"
 	"github.com/MuZaZaVr/account-service/internal/model"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+// Repositories contain other repository interfaces
 type Repositories struct {
 	AccountRepository    Account
 	CompanyRepository    Company
 	CredentialRepository Credential
 }
 
+// NewRepositories is a constructor for Repositories struct
 func NewRepositories(db *mongo.Database) *Repositories {
 	return &Repositories{
 		AccountRepository:    NewAccountRepository(db),
@@ -19,56 +22,56 @@ func NewRepositories(db *mongo.Database) *Repositories {
 	}
 }
 
-// Company represents CRUD-repo for model.Company
+// Company represents CRUD-repo for model.CompanyDTO
 type Company interface {
-	Create(company model.Company) (int, error)
+	Create(ctx context.Context, company model.CompanyDTO) (string, error)
 
-	FindByName(name string) (model.Company, error)
-	FindByURL(url string) (model.Company, error)
+	FindByName(ctx context.Context, name string) (*model.CompanyDTO, error)
+	FindByURL(ctx context.Context, url string) (*model.CompanyDTO, error)
 
-	UpdateName(newName string) (int, error)
-	UpdateDescription(newDescription string) (int, error)
-	UpdateURL(newUrl string) (int, error)
+	UpdateName(ctx context.Context, id string, newName string) (string, error)
+	UpdateDescription(ctx context.Context, id string, newDescription string) (string, error)
+	UpdateURL(ctx context.Context, id string, newUrl string) (string, error)
 
-	Delete(id int) (bool, error)
+	Delete(ctx context.Context, id string) (string, error)
 
-	IsExist(name string) (bool, error)
+	IsExist(ctx context.Context, name string) (bool, error)
 }
 
-// Credential represents CRUD-repo for model.Credential
+// Credential represents CRUD-repo for model.CredentialDTO
 type Credential interface {
-	Create(credential model.Credential) (int, error)
+	Create(ctx context.Context, credential model.CredentialDTO) (string, error)
 
-	FindByLogin(login string) ([]model.Credential, error)
-	FindByEmail(email string) ([]model.Credential, error)
-	FindByPhone(phone string) ([]model.Credential, error)
-	FindByName(name string) ([]model.Credential, error)
-	FindByMiddleName(middlename string) ([]model.Credential, error)
-	FindBySurname(surname string) ([]model.Credential, error)
+	FindByLogin(ctx context.Context, login string) ([]model.CredentialDTO, error)
+	FindByEmail(ctx context.Context, email string) ([]model.CredentialDTO, error)
+	FindByPhone(ctx context.Context, phone string) ([]model.CredentialDTO, error)
+	FindByName(ctx context.Context, name string) ([]model.CredentialDTO, error)
+	FindByMiddleName(ctx context.Context, middlename string) ([]model.CredentialDTO, error)
+	FindBySurname(ctx context.Context, surname string) ([]model.CredentialDTO, error)
 
-	UpdateLogin(newLogin string) (int, error)
-	UpdateEmail(newEmail string) (int, error)
-	UpdatePhone(newPhone string) (int, error)
-	UpdateName(newName string) (int, error)
-	UpdateMiddleName(newMiddlename string) (int, error)
-	UpdateSurname(newSurname string) (int, error)
+	UpdateLogin(ctx context.Context, newLogin string) (string, error)
+	UpdateEmail(ctx context.Context, newEmail string) (string, error)
+	UpdatePhone(ctx context.Context, newPhone string) (string, error)
+	UpdateName(ctx context.Context, newName string) (string, error)
+	UpdateMiddleName(ctx context.Context, newMiddlename string) (string, error)
+	UpdateSurname(ctx context.Context, newSurname string) (string, error)
 
-	Delete(in int) (bool, error)
+	Delete(ctx context.Context, id string) (bool, error)
 }
 
-// Account represents CRUD-repo for model.Account
+// Account represents CRUD-repo for model.AccountDTO
 type Account interface {
-	Create( model.Account) (int, error)
+	Create(ctx context.Context, account model.AccountDTO) (string, error)
 
-	FindByName(name string) (account model.Account, err error)
-	FindAllByCompanyId(id string) (int, []model.Account, error)
-	FindAllByUserID(id int) ([]model.Account, error)
+	FindByName(ctx context.Context, name string) (account model.AccountDTO, err error)
+	FindAllByCompanyId(ctx context.Context, id string) ([]model.AccountDTO, error)
+	FindAllByUserID(ctx context.Context, id int) ([]model.AccountDTO, error)
 
-	UpdateName(newName string) (int, error)
-	UpdateDescription(newDescription string) (int, error)
-	UpdateCompanyId(newCompanyId int) (int, error)
+	UpdateName(ctx context.Context, newName string) (string, error)
+	UpdateDescription(ctx context.Context, newDescription string) (string, error)
+	UpdateCompanyId(ctx context.Context, newCompanyId int) (string, error)
 
-	Delete(id int) (bool, error)
+	Delete(ctx context.Context, id string) (bool, error)
 
-	IsExist(name string) (bool, error)
+	IsExist(ctx context.Context, name string) (bool, error)
 }

@@ -3,11 +3,11 @@ package mongo
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Account struct {
-	Id          primitive.ObjectID `bson:"id"`
+	ID          primitive.ObjectID `bson:"_id"`
 	Name        string             `bson:"name"`
 	Description string             `bson:"description"`
 
 	UserId       int                `bson:"user_id"`
-	CompanyId    primitive.ObjectID `bson:"company_id"`
-	CredentialId primitive.ObjectID `bson:"credential_id"`
+	CompanyID    primitive.ObjectID `bson:"_company_id"`
+	CredentialID primitive.ObjectID `bson:"_credential_id"`
 }
