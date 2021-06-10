@@ -75,7 +75,7 @@ func (a *Account) ConvertFromMongoModelToDTO() *AccountDTO {
 }
 
 // ConvertFewFromDTOToMongoModels func convert a slice of AccountDTO objects into a slice of mongo.Account models
-func (a AccountsDTO) ConvertFewFromDTOToMongoModels() (*Accounts, error) {
+func (a AccountsDTO) ConvertFewFromDTOToMongoModels() (Accounts, error) {
 	var mongoAccounts Accounts
 	for _, accountDTO := range a {
 		mongoAccount, err := accountDTO.ConvertFromDTOToMongoModel()
@@ -85,16 +85,16 @@ func (a AccountsDTO) ConvertFewFromDTOToMongoModels() (*Accounts, error) {
 		mongoAccounts = append(mongoAccounts, *mongoAccount)
 	}
 
-	return &mongoAccounts, nil
+	return mongoAccounts, nil
 }
 
 // ConvertFewFromMongoModelsToDTO func convert a slice of mongo.Account models into a slice of AccountDTO objects
-func (a Accounts) ConvertFewFromMongoModelsToDTO() *AccountsDTO {
+func (a Accounts) ConvertFewFromMongoModelsToDTO() AccountsDTO {
 	var accountsDTO AccountsDTO
 	for _, mongoAccount := range a{
 		accountDTO := mongoAccount.ConvertFromMongoModelToDTO()
 		accountsDTO = append(accountsDTO, *accountDTO)
 	}
 
-	return &accountsDTO
+	return accountsDTO
 }

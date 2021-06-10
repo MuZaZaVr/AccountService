@@ -63,15 +63,15 @@ type Credential interface {
 type Account interface {
 	Create(ctx context.Context, account model.AccountDTO) (string, error)
 
-	FindByName(ctx context.Context, name string) (account model.AccountDTO, err error)
-	FindAllByCompanyId(ctx context.Context, id string) ([]model.AccountDTO, error)
+	FindByName(ctx context.Context, name string) (*model.AccountDTO, error)
+	FindAllByCompanyID(ctx context.Context, id string) ([]model.AccountDTO, error)
 	FindAllByUserID(ctx context.Context, id int) ([]model.AccountDTO, error)
 
 	UpdateName(ctx context.Context, id string, newName string) (string, error)
 	UpdateDescription(ctx context.Context, id string, newDescription string) (string, error)
-	UpdateCompanyId(ctx context.Context, id string, newCompanyId int) (string, error)
+	UpdateCompanyID(ctx context.Context, id string, newCompanyId string) (string, error)
 
-	Delete(ctx context.Context, id string) (bool, error)
+	Delete(ctx context.Context, id string) (string, error)
 
 	IsExist(ctx context.Context, name string) (bool, error)
 }

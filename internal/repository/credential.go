@@ -38,7 +38,7 @@ func (c CredentialRepository) Create(ctx context.Context, credential model.Crede
 	return result.InsertedID.(primitive.ObjectID).Hex(), nil
 }
 
-// FindByLogin func used to find all Credentials with such login and returns model.CredentialsDTO
+// FindByLogin func used to find all Credentials with such login and returns slice of model.CredentialDTO
 func (c CredentialRepository) FindByLogin(ctx context.Context, login string) ([]model.CredentialDTO, error) {
 
 	filterQuery := bson.M{"login": login}
@@ -57,7 +57,7 @@ func (c CredentialRepository) FindByLogin(ctx context.Context, login string) ([]
 	return foundedCredentials.ConvertFewFromMongoModelToDTO(), nil
 }
 
-// FindByEmail func used to find all Credentials with such login and returns model.CredentialsDTO
+// FindByEmail func used to find all Credentials with such login and returns slice of model.CredentialDTO
 func (c CredentialRepository) FindByEmail(ctx context.Context, email string) ([]model.CredentialDTO, error) {
 
 	filerQuery := bson.M{"email": email}
@@ -76,7 +76,7 @@ func (c CredentialRepository) FindByEmail(ctx context.Context, email string) ([]
 	return foundedCredentials.ConvertFewFromMongoModelToDTO(), err
 }
 
-// FindByPhone func used to find all Credentials with such phone and returns model.CredentialsDTO
+// FindByPhone func used to find all Credentials with such phone and returns slice of model.CredentialDTO
 func (c CredentialRepository) FindByPhone(ctx context.Context, phone string) ([]model.CredentialDTO, error) {
 
 	filterQuery := bson.M{"phone": phone}
@@ -95,7 +95,7 @@ func (c CredentialRepository) FindByPhone(ctx context.Context, phone string) ([]
 	return foundedCredentials.ConvertFewFromMongoModelToDTO(), err
 }
 
-// FindByName func used to find all Credentials with such name and returns model.CredentialsDTO
+// FindByName func used to find all Credentials with such name and returns slice of model.CredentialDTO
 func (c CredentialRepository) FindByName(ctx context.Context, name string) ([]model.CredentialDTO, error) {
 
 	filterQuery := bson.M{"name": name}
@@ -114,7 +114,7 @@ func (c CredentialRepository) FindByName(ctx context.Context, name string) ([]mo
 	return foundedCredentials.ConvertFewFromMongoModelToDTO(), err
 }
 
-// FindByMiddleName func used to find all Credentials with such middlename and returns model.CredentialsDTO
+// FindByMiddleName func used to find all Credentials with such middlename and returns slice of model.CredentialDTO
 func (c CredentialRepository) FindByMiddleName(ctx context.Context, middlename string) ([]model.CredentialDTO, error) {
 
 	filterQuery := bson.M{"middlename": middlename}
@@ -133,7 +133,7 @@ func (c CredentialRepository) FindByMiddleName(ctx context.Context, middlename s
 	return foundedCredentials.ConvertFewFromMongoModelToDTO(), err
 }
 
-// FindBySurname func used to find all Credentials with such surname and returns model.CredentialsDTO
+// FindBySurname func used to find all Credentials with such surname and returns slice of model.CredentialDTO
 func (c CredentialRepository) FindBySurname(ctx context.Context, surname string) ([]model.CredentialDTO, error) {
 
 	filterQuery := bson.M{"surname": surname}

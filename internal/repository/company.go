@@ -135,7 +135,7 @@ func (c CompanyRepository) UpdateURL(ctx context.Context, id string, newUrl stri
 	return updatedCompany.ID.Hex(), nil
 }
 
-// Delete func used to delete existed Company and returns deleted Company.responseID
+// Delete func used to delete existed Company and returns deleted Company.ID
 func (c CompanyRepository) Delete(ctx context.Context, id string) (string, error) {
 	opts := options.FindOneAndDelete().SetProjection(bson.D{{"_id", 1}})
 
@@ -154,7 +154,7 @@ func (c CompanyRepository) Delete(ctx context.Context, id string) (string, error
 	return deletedDocument.ID.Hex(), nil
 }
 
-// IsExist func used to check user existence and returns true if user exist or false if not
+// IsExist func used to check company existence and returns true if company exist or false if not
 func (c CompanyRepository) IsExist(ctx context.Context, name string) (bool, error) {
 	company, err := c.FindByName(ctx, name)
 	if err != nil {
