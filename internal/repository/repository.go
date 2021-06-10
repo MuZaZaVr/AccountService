@@ -49,14 +49,14 @@ type Credential interface {
 	FindByMiddleName(ctx context.Context, middlename string) ([]model.CredentialDTO, error)
 	FindBySurname(ctx context.Context, surname string) ([]model.CredentialDTO, error)
 
-	UpdateLogin(ctx context.Context, newLogin string) (string, error)
-	UpdateEmail(ctx context.Context, newEmail string) (string, error)
-	UpdatePhone(ctx context.Context, newPhone string) (string, error)
-	UpdateName(ctx context.Context, newName string) (string, error)
-	UpdateMiddleName(ctx context.Context, newMiddlename string) (string, error)
-	UpdateSurname(ctx context.Context, newSurname string) (string, error)
+	UpdateLogin(ctx context.Context, id string, newLogin string) (string, error)
+	UpdateEmail(ctx context.Context, id string, newEmail string) (string, error)
+	UpdatePhone(ctx context.Context, id string, newPhone string) (string, error)
+	UpdateName(ctx context.Context, id string, newName string) (string, error)
+	UpdateMiddleName(ctx context.Context, id string, newMiddlename string) (string, error)
+	UpdateSurname(ctx context.Context, id string, newSurname string) (string, error)
 
-	Delete(ctx context.Context, id string) (bool, error)
+	Delete(ctx context.Context, id string) (string, error)
 }
 
 // Account represents CRUD-repo for model.AccountDTO
@@ -67,9 +67,9 @@ type Account interface {
 	FindAllByCompanyId(ctx context.Context, id string) ([]model.AccountDTO, error)
 	FindAllByUserID(ctx context.Context, id int) ([]model.AccountDTO, error)
 
-	UpdateName(ctx context.Context, newName string) (string, error)
-	UpdateDescription(ctx context.Context, newDescription string) (string, error)
-	UpdateCompanyId(ctx context.Context, newCompanyId int) (string, error)
+	UpdateName(ctx context.Context, id string, newName string) (string, error)
+	UpdateDescription(ctx context.Context, id string, newDescription string) (string, error)
+	UpdateCompanyId(ctx context.Context, id string, newCompanyId int) (string, error)
 
 	Delete(ctx context.Context, id string) (bool, error)
 

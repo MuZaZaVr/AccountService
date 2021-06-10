@@ -52,7 +52,7 @@ func (c CredentialDTO) ConvertFromDTOToMongoModel() (*Credential, error) {
 	}
 
 	if c.ID != "" {
-		credential.Id, err = primitive.ObjectIDFromHex(c.ID)
+		credential.ID, err = primitive.ObjectIDFromHex(c.ID)
 		if err != nil {
 			return nil, errors.Wrap(err, "invalid id")
 		}
@@ -64,7 +64,7 @@ func (c CredentialDTO) ConvertFromDTOToMongoModel() (*Credential, error) {
 // ConvertFromMongoModelToDTO func convert mongo.Credential model into CredentialDTO object
 func (c Credential) ConvertFromMongoModelToDTO() *CredentialDTO {
 	credentialDTO := CredentialDTO{
-		ID:           c.Id.Hex(),
+		ID:           c.ID.Hex(),
 		Login:        c.Login,
 		PasswordHash: c.PasswordHash,
 		Email:        c.Email,
@@ -81,7 +81,7 @@ func (c Credential) ConvertFromMongoModelToDTO() *CredentialDTO {
 }
 
 // ConvertFewFromDTOToMongoModel func convert slice of CredentialDTO object into slice of mongo.Credential models
-func (c CredentialsDTO) ConvertFewFromDTOToMongoModel() (*Credentials, error) {
+func (c CredentialsDTO) ConvertFewFromDTOToMongoModel() (Credentials, error) {
 	var credentials Credentials
 
 	for _, credential := range c {
@@ -92,16 +92,16 @@ func (c CredentialsDTO) ConvertFewFromDTOToMongoModel() (*Credentials, error) {
 		credentials = append(credentials, *convertedCredential)
 	}
 
-	return &credentials, nil
+	return credentials, nil
 }
 
 // ConvertFewFromMongoModelToDTO func convert slice of mongo.Credential models into slice if CredentialDTO objects
-func (c Credentials) ConvertFewFromMongoModelToDTO() *CredentialsDTO {
+func (c Credentials) ConvertFewFromMongoModelToDTO() CredentialsDTO {
 	var credentialsDTO CredentialsDTO
 
 	for _, credential := range c {
 		credentialsDTO = append(credentialsDTO, *credential.ConvertFromMongoModelToDTO())
 	}
 
-	return &credentialsDTO
+	return credentialsDTO
 }
