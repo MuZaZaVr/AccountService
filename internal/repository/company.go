@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"github.com/MuZaZaVr/account-service/internal/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -20,9 +21,7 @@ type CompanyRepository struct {
 func NewCompanyRepository(db *mongoDriver.Database) *CompanyRepository {
 	collection := db.Collection(dbCompanyCollectionName)
 
-	return &CompanyRepository{
-		db: collection,
-	}
+	return &CompanyRepository{db: collection}
 }
 
 // Create func used to create new Company and returns CompanyID
@@ -45,6 +44,10 @@ func (c CompanyRepository) Create(ctx context.Context, company model.CompanyDTO)
 func (c CompanyRepository) FindByName(ctx context.Context, name string) (*model.CompanyDTO, error) {
 	var mongoCompany model.Company
 
+	if name == "" {
+		return nil, errors.New("empty company name")
+	}
+
 	query := bson.M{"name": name}
 	err := c.db.FindOne(ctx, query).Decode(&mongoCompany)
 	if err != nil {
@@ -59,6 +62,10 @@ func (c CompanyRepository) FindByName(ctx context.Context, name string) (*model.
 // FindByURL func used to find Company and returns model.CompanyDTO
 func (c CompanyRepository) FindByURL(ctx context.Context, url string) (*model.CompanyDTO, error) {
 	var mongoCompany model.Company
+
+	if url == "" {
+		return nil, errors.New("empty company URL")
+	}
 
 	query := bson.M{"URL": url}
 	err := c.db.FindOne(ctx, query).Decode(&mongoCompany)
@@ -90,7 +97,7 @@ func (c CompanyRepository) UpdateName(ctx context.Context, id string, newName st
 	return updatedCompany.ID.Hex(), nil
 }
 
-// UpdateDescription func used tu update Company's description and returns updated CompanyID
+// UpdateDescription func used to update Company's description and returns updated CompanyID
 func (c CompanyRepository) UpdateDescription(ctx context.Context, id string, newDescription string) (string, error) {
 	convertedID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -121,11 +128,14 @@ func (c CompanyRepository) UpdateURL(ctx context.Context, id string, newUrl stri
 
 	var updatedCompany model.Company
 	err = c.db.FindOneAndUpdate(ctx, filterQuery, updateQuery).Decode(&updatedCompany)
+	if err != nil {
+		return "", err
+	}
 
 	return updatedCompany.ID.Hex(), nil
 }
 
-// Delete func used to delete existed Company and returns number of deleted documents
+// Delete func used to delete existed Company and returns deleted Company.responseID
 func (c CompanyRepository) Delete(ctx context.Context, id string) (string, error) {
 	opts := options.FindOneAndDelete().SetProjection(bson.D{{"_id", 1}})
 
