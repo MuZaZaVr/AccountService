@@ -36,7 +36,7 @@ func (a AccountRepository) Create(ctx context.Context, account model.AccountDTO)
 	return result.InsertedID.(primitive.ObjectID).Hex(), nil
 }
 
-// FindByName func used to find Account and returns model.AccountDTO
+// FindByName func used to find Account by name and returns model.AccountDTO
 func (a AccountRepository) FindByName(ctx context.Context, name string) (*model.AccountDTO, error) {
 	filterQuery := bson.M{"name": name}
 
@@ -49,6 +49,37 @@ func (a AccountRepository) FindByName(ctx context.Context, name string) (*model.
 	convertedAccount := account.ConvertFromMongoModelToDTO()
 
 	return convertedAccount, nil
+}
+
+// FindByCredentialID func used to find Account by Credential ID and returns model.AccountDTO
+func (a AccountRepository) FindByCredentialID(ctx context.Context, id string) (*model.AccountDTO, error) {
+	var account model.Account
+
+	convertedID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	err = a.db.FindOne(ctx, convertedID).Decode(&account)
+	if err != nil {
+		return nil, err
+	}
+
+	return account.ConvertFromMongoModelToDTO(), nil
+}
+
+// FindCredentialIDByAccountID func used to find Credential ID by Account ID and returns model.AccountDTO
+func (a AccountRepository) FindCredentialIDByAccountID(ctx context.Context, id string) (string, error) {
+	var credential model.Credential
+
+	filterQuery := bson.M{"_id": id}
+
+	err := a.db.FindOne(ctx, filterQuery).Decode(&credential)
+	if err != nil {
+		return "", err
+	}
+
+	return credential.ID.Hex(), nil
 }
 
 // FindAllByCompanyID func used to find all Accounts with such companyID and returns slice of model.AccountDTO

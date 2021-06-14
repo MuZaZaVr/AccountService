@@ -2,20 +2,20 @@ package request
 
 type (
 	CreateCredentialRequest struct {
-		Login string
-		Password string
-		Email string
-		Phone string
-		Name string
+		Login      string
+		Password   string
+		Email      string
+		Phone      string
+		Name       string
 		Middlename string
-		Surname string
-		Age int
-		City string
-		Address string
+		Surname    string
+		Age        int
+		City       string
+		Address    string
 	}
 
 	DeleteCredentialRequest struct {
-		Id int
+		ID string
 	}
 
 	FindCredentialByLoginRequest struct {
@@ -42,28 +42,33 @@ type (
 		Surname string
 	}
 
-
 	UpdateCredentialLoginRequest struct {
+		ID       string
 		NewLogin string
 	}
 
 	UpdateCredentialEmailRequest struct {
+		ID       string
 		NewEmail string
 	}
 
 	UpdateCredentialPhoneRequest struct {
-		Phone string
+		ID       string
+		NewPhone string
 	}
 
 	UpdateCredentialNameRequest struct {
-		Name string
+		ID      string
+		NewName string
 	}
 
 	UpdateCredentialMiddlenameRequest struct {
-		Middlename string
+		ID            string
+		NewMiddlename string
 	}
 
 	UpdateCredentialSurnameRequest struct {
-		Surname string
+		ID         string
+		NewSurname string
 	}
 )

@@ -4,13 +4,12 @@ type (
 	CreateCompanyRequest struct {
 		Name        string
 		Description string
-		Url         string
+		URL         string
 	}
 
 	DeleteCompanyRequest struct {
-		Id int
+		ID string
 	}
-
 
 	FindCompanyByNameRequest struct {
 		Name string
@@ -21,17 +20,19 @@ type (
 	}
 
 	UpdateCompanyNameRequest struct {
-		Name string
+		ID      string
+		NewName string
 	}
 
 	UpdateCompanyDescriptionRequest struct {
-		Description string
+		ID             string
+		NewDescription string
 	}
 
 	UpdateCompanyURLRequest struct {
-		URL string
+		ID     string
+		NewURL string
 	}
-
 
 	IsCompanyExistRequest struct {
 		Name string

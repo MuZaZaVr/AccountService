@@ -64,6 +64,8 @@ type Account interface {
 	Create(ctx context.Context, account model.AccountDTO) (string, error)
 
 	FindByName(ctx context.Context, name string) (*model.AccountDTO, error)
+	FindByCredentialID(ctx context.Context, id string) (*model.AccountDTO, error)
+	FindCredentialIDByAccountID(ctx context.Context, id string) (string, error)
 	FindAllByCompanyID(ctx context.Context, id string) ([]model.AccountDTO, error)
 	FindAllByUserID(ctx context.Context, id int) ([]model.AccountDTO, error)
 

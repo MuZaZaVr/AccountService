@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"github.com/MuZaZaVr/account-service/internal/model"
 	"github.com/MuZaZaVr/account-service/internal/model/request"
 	"github.com/MuZaZaVr/account-service/internal/repository"
@@ -22,64 +23,68 @@ func NewServices(deps Deps) *Services {
 	return &Services{
 		CompanyService:    NewCompanyService(deps.Repos.CompanyRepository),
 		CredentialService: NewCredentialService(deps.Repos.CredentialRepository),
-		AccountService:    NewAccountService(deps.Repos.AccountRepository, deps.TokenManager),
+		AccountService:    NewAccountService(deps.Repos, deps.TokenManager),
 	}
 }
 
 type Company interface {
-	Create(req request.CreateCompanyRequest) (string, error)
+	Create(ctx context.Context, req request.CreateCompanyRequest) (string, error)
 
-	FindByName(req request.FindCompanyByNameRequest) (model.Company, error)
-	FindByURL(req request.FindCompanyByURLRequest) (model.Company, error)
+	FindByName(ctx context.Context, req request.FindCompanyByNameRequest) (*model.CompanyDTO, error)
+	FindByURL(ctx context.Context, req request.FindCompanyByURLRequest) (*model.CompanyDTO, error)
 
-	UpdateName(req request.UpdateCompanyNameRequest) (string, error)
-	UpdateDescription(req request.UpdateCompanyDescriptionRequest) (string, error)
-	UpdateURL(req request.UpdateCompanyURLRequest) (string, error)
+	UpdateName(ctx context.Context, req request.UpdateCompanyNameRequest) (string, error)
+	UpdateDescription(ctx context.Context, req request.UpdateCompanyDescriptionRequest) (string, error)
+	UpdateURL(ctx context.Context, req request.UpdateCompanyURLRequest) (string, error)
 
-	Delete(req request.DeleteCompanyRequest) (bool, error)
+	Delete(ctx context.Context, req request.DeleteCompanyRequest) (string, error)
 
-	IsExist(req request.IsCompanyExistRequest) (bool, error)
+	IsExist(ctx context.Context, req request.IsCompanyExistRequest) (bool, error)
 }
 
 type Credential interface {
-	Create(req request.CreateCredentialRequest) (int, error)
+	Create(ctx context.Context, req request.CreateCredentialRequest) (string, error)
 
-	FindByLogin(req request.FindCredentialByLoginRequest) ([]model.Credential, error)
-	FindByEmail(req request.FindCredentialByEmailRequest) ([]model.Credential, error)
-	FindByPhone(req request.FindCredentialByPhoneRequest) ([]model.Credential, error)
-	FindByName(req request.FindCredentialByNameRequest) ([]model.Credential, error)
-	FindByMiddleName(req request.FindCredentialByMiddlenameRequest) ([]model.Credential, error)
-	FindBySurname(req request.FindCredentialBySurnameRequest) ([]model.Credential, error)
+	FindByLogin(ctx context.Context, req request.FindCredentialByLoginRequest) ([]model.CredentialDTO, error)
+	FindByEmail(ctx context.Context, req request.FindCredentialByEmailRequest) ([]model.CredentialDTO, error)
+	FindByPhone(ctx context.Context, req request.FindCredentialByPhoneRequest) ([]model.CredentialDTO, error)
+	FindByName(ctx context.Context, req request.FindCredentialByNameRequest) ([]model.CredentialDTO, error)
+	FindByMiddleName(ctx context.Context, req request.FindCredentialByMiddlenameRequest) ([]model.CredentialDTO, error)
+	FindBySurname(ctx context.Context, req request.FindCredentialBySurnameRequest) ([]model.CredentialDTO, error)
 
-	UpdateLogin(req request.UpdateCredentialLoginRequest) (string, error)
-	UpdateEmail(req request.UpdateCredentialEmailRequest) (string, error)
-	UpdatePhone(req request.UpdateCredentialPhoneRequest) (string, error)
-	UpdateName(req request.UpdateCredentialNameRequest) (string, error)
-	UpdateMiddleName(req request.UpdateCredentialMiddlenameRequest) (string, error)
-	UpdateSurname(req request.UpdateCredentialSurnameRequest) (string, error)
+	UpdateLogin(ctx context.Context, req request.UpdateCredentialLoginRequest) (string, error)
+	UpdateEmail(ctx context.Context, req request.UpdateCredentialEmailRequest) (string, error)
+	UpdatePhone(ctx context.Context, req request.UpdateCredentialPhoneRequest) (string, error)
+	UpdateName(ctx context.Context, req request.UpdateCredentialNameRequest) (string, error)
+	UpdateMiddleName(ctx context.Context, req request.UpdateCredentialMiddlenameRequest) (string, error)
+	UpdateSurname(ctx context.Context, req request.UpdateCredentialSurnameRequest) (string, error)
 
-	Delete(req request.DeleteCredentialRequest) (bool, error)
+	Delete(ctx context.Context, req request.DeleteCredentialRequest) (string, error)
 }
 
 type Account interface {
-	Create(req request.CreateAccountRequest) (string, error)
+	Create(ctx context.Context, req request.CreateAccountRequest) (string, error)
 
-	FindByCredentialLogin(req request.FindAccountsByCredentialLoginRequest) ([]repository.Account, error)
-	FindByCredentialEmail(req request.FindAccountsByCredentialEmailRequest) ([]repository.Account, error)
-	FindByCredentialPhone(req request.FindAccountsByCredentialPhoneRequest) ([]repository.Account, error)
-	FindByCredentialName(req request.FindAccountsByCredentialNameRequest) ([]repository.Account, error)
-	FindByCredentialMiddlename(req request.FindAccountsByCredentialMiddlenameRequest) ([]repository.Account, error)
-	FindByCredentialSurname(req request.FindAccountsByCredentialSurnameRequest) ([]repository.Account, error)
+	FindByName(ctx context.Context, req request.FindAccountByNameRequest) (*model.AccountDTO, error)
+	UpdateDescription(ctx context.Context, req request.UpdateCompanyDescriptionRequest) (string, error)
 
-	UpdateCredentialLogin(req request.UpdateAccountCredentialLoginRequest) (string, error)
-	UpdateCredentialEmail(req request.UpdateAccountCredentialEmailRequest) (string, error)
-	UpdateCredentialPhone(req request.UpdateAccountCredentialPhoneRequest) (string, error)
-	UpdateCredentialName(req request.UpdateAccountCredentialNameRequest) (string, error)
-	UpdateCredentialMiddlename(req request.UpdateAccountCredentialMiddlenameRequest) (string, error)
-	UpdateCredentialSurname(req request.UpdateAccountCredentialSurnameRequest) (string, error)
+	Delete(ctx context.Context, req request.DeleteAccountRequest) (string, error)
 
-	FindByName(req request.FindAccountByNameRequest) (model.Account, error)
-	UpdateDescription(req request.UpdateCompanyDescriptionRequest)
+	FindAllByCompanyID(ctx context.Context, req request.FindAllAccountsByCompanyIDRequest) ([]model.AccountDTO, error)
+	FindAllByUserID(ctx context.Context, req request.FindAllAccountsByUserIDRequest) ([]model.AccountDTO, error)
 
-	Delete(req request.DeleteAccountRequest) (bool, error)
+	FindByCredentialLogin(ctx context.Context, req request.FindAccountsByCredentialLoginRequest) ([]model.AccountDTO, error)
+	FindByCredentialEmail(ctx context.Context, req request.FindAccountsByCredentialEmailRequest) ([]model.AccountDTO, error)
+	FindByCredentialPhone(ctx context.Context, req request.FindAccountsByCredentialPhoneRequest) ([]model.AccountDTO, error)
+	FindByCredentialName(ctx context.Context, req request.FindAccountsByCredentialNameRequest) ([]model.AccountDTO, error)
+	FindByCredentialMiddlename(ctx context.Context, req request.FindAccountsByCredentialMiddlenameRequest) ([]model.AccountDTO, error)
+	FindByCredentialSurname(ctx context.Context, req request.FindAccountsByCredentialSurnameRequest) ([]model.AccountDTO, error)
+
+	UpdateCredentialLogin(ctx context.Context, req request.UpdateAccountCredentialLoginRequest) (string, error)
+	UpdateCredentialEmail(ctx context.Context, req request.UpdateAccountCredentialEmailRequest) (string, error)
+	UpdateCredentialPhone(ctx context.Context, req request.UpdateAccountCredentialPhoneRequest) (string, error)
+	UpdateCredentialName(ctx context.Context, req request.UpdateAccountCredentialNameRequest) (string, error)
+	UpdateCredentialMiddlename(ctx context.Context, req request.UpdateAccountCredentialMiddlenameRequest) (string, error)
+	UpdateCredentialSurname(ctx context.Context, req request.UpdateAccountCredentialSurnameRequest) (string, error)
+
 }
