@@ -9,5 +9,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.0 // indirect
+	github.com/vektra/mockery/v2 v2.8.0 // indirect
 	go.mongodb.org/mongo-driver v1.5.3
 )
