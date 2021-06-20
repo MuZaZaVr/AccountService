@@ -20,8 +20,13 @@ func NewHandler(services *service.Services, tokenManager auth.TokenManager) *API
 		mux.NewRouter(),
 	}
 
-	api.PathPrefix(accountPathPrefix).Handler(newCompanyRouter(services, tokenManager))
-	api.PathPrefix(companyPathPrefix).Handler(newAccountHandler(services, tokenManager))
+	api.PathPrefix(companyPathPrefix).
+		Handler(newCompanyRouter(services, tokenManager)).
+		Name("companyRouter")
+
+	api.PathPrefix(accountPathPrefix).
+		Handler(newAccountHandler(services, tokenManager)).
+		Name("accountRouter")
 
 	return &api
 }

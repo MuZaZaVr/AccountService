@@ -11,7 +11,7 @@ type Company mongo.Company
 
 // CompanyDTO represents DTO structure for mongo.Company
 type CompanyDTO struct {
-	ID          string `json:"id"`
+	ID          string `json:"id,omitempty"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	URL         string `json:"url"`
