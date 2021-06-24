@@ -1,0 +1,9 @@
+Mongo:
+  databaseName: account-service-db
+  databaseDialect: mongodb
+
+HTTP:
+  port: 8000
+  maxHeaderBytes: 1
+  readTimeout: 10s
+  writeTimeout: 10s
