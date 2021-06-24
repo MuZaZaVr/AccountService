@@ -13,6 +13,8 @@ import (
 	"testing"
 )
 
+const configPath = "config/main"
+
 func ConnectToCompanyMongo() (context.Context, *CompanyRepository, error) {
 	ctx := context.Background()
 

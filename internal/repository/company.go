@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"github.com/MuZaZaVr/account-service/internal/model"
 	"github.com/MuZaZaVr/account-service/internal/model/converter"
 	"github.com/MuZaZaVr/account-service/pkg/database/mongo"
@@ -43,6 +44,10 @@ func (c CompanyRepository) Create(ctx context.Context, company model.CompanyDTO)
 
 // FindByName func used to find Company and returns model.CompanyDTO
 func (c CompanyRepository) FindByName(ctx context.Context, name string) (*model.CompanyDTO, error) {
+	if name == "" {
+		return nil, errors.New("empty company name")
+	}
+
 	var mongoCompany mongo.Company
 
 	query := bson.M{"name": name}
@@ -59,6 +64,10 @@ func (c CompanyRepository) FindByName(ctx context.Context, name string) (*model.
 
 // FindByURL func used to find Company and returns model.CompanyDTO
 func (c CompanyRepository) FindByURL(ctx context.Context, url string) (*model.CompanyDTO, error) {
+	if url == "" {
+		return nil, errors.New("empty company URL")
+	}
+
 	var mongoCompany mongo.Company
 
 	query := bson.M{"URL": url}
@@ -151,6 +160,9 @@ func (c CompanyRepository) Delete(ctx context.Context, id string) (string, error
 
 // IsExist func used to check company existence and returns true if company exist or false if not
 func (c CompanyRepository) IsExist(ctx context.Context, name string) (bool, error) {
+	if name == "" {
+		return false, errors.New("empty company name")
+	}
 	company, err := c.FindByName(ctx, name)
 	if err != nil {
 		return false, err

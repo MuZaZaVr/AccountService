@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"github.com/MuZaZaVr/account-service/internal/model"
 	"github.com/MuZaZaVr/account-service/internal/model/converter"
 	"github.com/MuZaZaVr/account-service/pkg/database/mongo"
@@ -41,12 +42,16 @@ func (a AccountRepository) Create(ctx context.Context, account model.AccountDTO)
 
 // FindByName func used to find Account by name and returns model.AccountDTO
 func (a AccountRepository) FindByName(ctx context.Context, name string) (*model.AccountDTO, error) {
+	if name == "" {
+		return nil, errors.New("empty account name")
+	}
+
 	filterQuery := bson.M{"name": name}
 
 	var mongoAccount mongo.Account
 	err := a.db.FindOne(ctx, filterQuery).Decode(&mongoAccount)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	var convertedAccount model.AccountDTO
