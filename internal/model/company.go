@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// Company represents Company model for mongo
+// CompanyIn represents CompanyIn model for mongo
 type Company mongo.Company
 
 // CompanyDTO represents DTO structure for mongo.Company
@@ -36,7 +36,7 @@ func (c CompanyDTO) ConvertFromDTOToMongoModel() (*Company, error) {
 	return &company, err
 }
 
-// ConvertFromMongoModelToDTO func convert Company model into CompanyDTO model
+// ConvertFromMongoModelToDTO func convert CompanyIn model into CompanyDTO model
 func (c Company) ConvertFromMongoModelToDTO() *CompanyDTO {
 	companyDTO := CompanyDTO{
 		ID:          c.ID.Hex(),

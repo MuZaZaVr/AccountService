@@ -21,9 +21,9 @@ type AccountDTO struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 
-	UserId       int    `json:"user_id"`
-	CompanyID    string `json:"company_id"`
-	CredentialID string `json:"credential_id"`
+	UserID      int            `json:"user_id"`
+	Company     *CompanyDTO    `json:"company"`
+	Credentials *CredentialDTO `json:"credentials"`
 }
 
 // ConvertFromDTOToMongoModel func convert AccountDTO object to mongo.Account model
@@ -33,7 +33,7 @@ func (a *AccountDTO) ConvertFromDTOToMongoModel() (*Account, error) {
 		Name:        a.Name,
 		Description: a.Description,
 
-		UserId: a.UserId,
+		UserId: a.UserID,
 	}
 
 	if a.ID != "" {
@@ -43,17 +43,10 @@ func (a *AccountDTO) ConvertFromDTOToMongoModel() (*Account, error) {
 		}
 	}
 
-	if a.CompanyID != "" {
-		account.CompanyID, err = primitive.ObjectIDFromHex(a.CompanyID)
+	if a.Company.ID != "" {
+		account.Company.ID, err = primitive.ObjectIDFromHex(a.Company.ID)
 		if err != nil {
 			return nil, errors.Wrap(err, "invalid company id")
-		}
-	}
-
-	if a.CredentialID != "" {
-		account.CredentialID, err = primitive.ObjectIDFromHex(a.CredentialID)
-		if err != nil {
-			return nil, errors.Wrap(err, "invalid credential id")
 		}
 	}
 
@@ -63,12 +56,12 @@ func (a *AccountDTO) ConvertFromDTOToMongoModel() (*Account, error) {
 // ConvertFromMongoModelToDTO func convert mongo.Account model to CompanyDTO object
 func (a *Account) ConvertFromMongoModelToDTO() *AccountDTO {
 	account := AccountDTO{
-		ID:           a.ID.Hex(),
-		Name:         a.Name,
-		Description:  a.Description,
-		UserId:       a.UserId,
-		CompanyID:    a.CompanyID.Hex(),
-		CredentialID: a.CredentialID.Hex(),
+		ID:          a.ID.Hex(),
+		Name:        a.Name,
+		Description: a.Description,
+		UserID:      a.UserId,
+		Company:     a.Company.ConvertFromMongoModelToDTO(),
+		Credentials: a.Credentials.ConvertFromMongoModelToDTO(),
 	}
 
 	return &account
@@ -91,7 +84,7 @@ func (a AccountsDTO) ConvertFewFromDTOToMongoModels() (Accounts, error) {
 // ConvertFewFromMongoModelsToDTO func convert a slice of mongo.Account models into a slice of AccountDTO objects
 func (a Accounts) ConvertFewFromMongoModelsToDTO() AccountsDTO {
 	var accountsDTO AccountsDTO
-	for _, mongoAccount := range a{
+	for _, mongoAccount := range a {
 		accountDTO := mongoAccount.ConvertFromMongoModelToDTO()
 		accountsDTO = append(accountsDTO, *accountDTO)
 	}

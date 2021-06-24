@@ -1,5 +1,7 @@
 package request
 
+import "github.com/MuZaZaVr/account-service/internal/model"
+
 type (
 	CreateAccountRequest struct {
 		Name        string
@@ -7,8 +9,8 @@ type (
 
 		UserID int
 
-		CompanyID    string
-		CredentialID string
+		Company     model.CompanyDTO
+		Credentials model.CredentialDTO
 	}
 
 	DeleteAccountRequest struct {

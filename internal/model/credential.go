@@ -2,8 +2,6 @@ package model
 
 import (
 	"github.com/MuZaZaVr/account-service/pkg/database/mongo"
-	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // Credential represents mongo.Credential model for mongo
@@ -17,8 +15,6 @@ type CredentialsDTO []CredentialDTO
 
 // CredentialDTO represents DTO structure fot mongo.Credential
 type CredentialDTO struct {
-	ID string `json:"id,omitempty"`
-
 	Login        string `json:"login"`
 	PasswordHash string `json:"password_hash"`
 	Email        string `json:"email"`
@@ -34,8 +30,7 @@ type CredentialDTO struct {
 }
 
 // ConvertFromDTOToMongoModel func convert CredentialDTO object into mongo.Credential model
-func (c CredentialDTO) ConvertFromDTOToMongoModel() (*Credential, error) {
-	var err error
+func (c CredentialDTO) ConvertFromDTOToMongoModel() *Credential {
 	credential := Credential{
 		Login:        c.Login,
 		PasswordHash: c.PasswordHash,
@@ -51,20 +46,12 @@ func (c CredentialDTO) ConvertFromDTOToMongoModel() (*Credential, error) {
 		Address: c.Address,
 	}
 
-	if c.ID != "" {
-		credential.ID, err = primitive.ObjectIDFromHex(c.ID)
-		if err != nil {
-			return nil, errors.Wrap(err, "invalid id")
-		}
-	}
-
-	return &credential, nil
+	return &credential
 }
 
 // ConvertFromMongoModelToDTO func convert mongo.Credential model into CredentialDTO object
 func (c Credential) ConvertFromMongoModelToDTO() *CredentialDTO {
 	credentialDTO := CredentialDTO{
-		ID:           c.ID.Hex(),
 		Login:        c.Login,
 		PasswordHash: c.PasswordHash,
 		Email:        c.Email,
@@ -85,10 +72,7 @@ func (c CredentialsDTO) ConvertFewFromDTOToMongoModel() (Credentials, error) {
 	var credentials Credentials
 
 	for _, credential := range c {
-		convertedCredential, err := credential.ConvertFromDTOToMongoModel()
-		if err != nil {
-			return nil, errors.Wrap(err, "can't convert CredentialDTO to mongoCredential")
-		}
+		convertedCredential := credential.ConvertFromDTOToMongoModel()
 		credentials = append(credentials, *convertedCredential)
 	}
 
