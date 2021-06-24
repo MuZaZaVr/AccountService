@@ -1,6 +1,6 @@
 package mongo
 
-type Credential struct {
+type Credentials struct {
 	Login        string `bson:"login"`
 	PasswordHash string `bson:"password_hash"`
 	Email        string `bson:"email"`
