@@ -1,0 +1,432 @@
+definitions:
+  middleware.SwagError:
+    properties:
+      message:
+        type: string
+    type: object
+  model.AccountDTO:
+    properties:
+      company:
+        $ref: '#/definitions/model.CompanyDTO'
+      credentials:
+        $ref: '#/definitions/model.CredentialsDTO'
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  model.CompanyDTO:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+  model.CredentialsDTO:
+    properties:
+      address:
+        type: string
+      age:
+        type: integer
+      city:
+        type: string
+      email:
+        type: string
+      login:
+        type: string
+      middlename:
+        type: string
+      name:
+        type: string
+      password_hash:
+        type: string
+      phone:
+        type: string
+      surname:
+        type: string
+    type: object
+  request.CreateAccountRequest:
+    properties:
+      company:
+        $ref: '#/definitions/model.CompanyDTO'
+      credential:
+        $ref: '#/definitions/model.CredentialsDTO'
+      description:
+        type: string
+      name:
+        type: string
+      userID:
+        type: integer
+    type: object
+  request.CreateCompanyRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+  request.DeleteAccountRequest:
+    properties:
+      id:
+        type: string
+    type: object
+  request.DeleteCompanyRequest:
+    properties:
+      id:
+        type: string
+    type: object
+  request.FindAccountByNameRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  request.FindCompanyByNameRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  request.FindCompanyByURLRequest:
+    properties:
+      url:
+        type: string
+    type: object
+  request.UpdateAccountRequest:
+    properties:
+      id:
+        type: string
+      updatedAccount:
+        $ref: '#/definitions/model.AccountDTO'
+    type: object
+  request.UpdateCompanyDescriptionRequest:
+    properties:
+      id:
+        type: string
+      newDescription:
+        type: string
+    type: object
+  request.UpdateCompanyNameRequest:
+    properties:
+      id:
+        type: string
+      newName:
+        type: string
+    type: object
+  request.UpdateCompanyURLRequest:
+    properties:
+      id:
+        type: string
+      newURL:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /account/:
+    delete:
+      consumes:
+      - application/json
+      description: Delete account
+      parameters:
+      - description: Account
+        in: body
+        name: purchase
+        required: true
+        schema:
+          $ref: '#/definitions/request.DeleteAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+      summary: Delete
+      tags:
+      - account
+    post:
+      consumes:
+      - application/json
+      description: Create account
+      parameters:
+      - description: Account
+        in: body
+        name: purchase
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+      summary: Create account
+      tags:
+      - account
+    put:
+      consumes:
+      - application/json
+      description: Update account
+      parameters:
+      - description: Account
+        in: body
+        name: purchase
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+      summary: Delete account
+      tags:
+      - account
+  /company/create/:
+    post:
+      consumes:
+      - application/json
+      description: Create company
+      parameters:
+      - description: Company
+        in: body
+        name: purchase
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateCompanyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+      summary: Create company
+      tags:
+      - company
+  /company/delete/:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes company by ID
+      parameters:
+      - description: Company
+        in: body
+        name: purchase
+        required: true
+        schema:
+          $ref: '#/definitions/request.DeleteCompanyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+      summary: Delete company
+      tags:
+      - company
+  /company/find/name:
+    get:
+      consumes:
+      - application/json
+      description: Find company by provided name
+      parameters:
+      - description: Company
+        in: body
+        name: purchase
+        required: true
+        schema:
+          $ref: '#/definitions/request.FindCompanyByNameRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+      summary: Find company by name
+      tags:
+      - company
+  /company/find/url:
+    get:
+      consumes:
+      - application/json
+      description: Find company by provided URL
+      parameters:
+      - description: Company
+        in: body
+        name: purchase
+        required: true
+        schema:
+          $ref: '#/definitions/request.FindCompanyByURLRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+      summary: Find company by URL
+      tags:
+      - company
+  /company/update/description/:
+    put:
+      consumes:
+      - application/json
+      description: Updates company description by ID
+      parameters:
+      - description: Company
+        in: body
+        name: purchase
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateCompanyDescriptionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+      summary: Update company's description
+      tags:
+      - company
+  /company/update/name/:
+    put:
+      consumes:
+      - application/json
+      description: Updates company name by ID
+      parameters:
+      - description: Company
+        in: body
+        name: purchase
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateCompanyNameRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+      summary: Update company's name
+      tags:
+      - company
+  /company/update/url/:
+    put:
+      consumes:
+      - application/json
+      description: Updates company URL by ID
+      parameters:
+      - description: Company
+        in: body
+        name: purchase
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateCompanyURLRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.SwagError'
+      summary: Update company's URL
+      tags:
+      - company
+swagger: "2.0"

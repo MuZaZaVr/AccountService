@@ -61,6 +61,16 @@ func (req createAccountRequest) Validate() error {
 	return nil
 }
 
+// @Summary Create account
+// @Tags account
+// @Description Create account
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.CreateAccountRequest true "Account"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /account/ [post]
 func (ar *accountRouter) createAccount(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req createAccountRequest
@@ -99,6 +109,16 @@ func (req findByNameRequest) Validate() error {
 	return nil
 }
 
+// @Summary Find account by name
+// @Tags account
+// @Description Find account by provided account name
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.FindAccountByNameRequest true "Account"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /account/ [put]
 func (ar *accountRouter) findAccountByName(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req findByNameRequest
@@ -141,6 +161,16 @@ func (req *updateAccountRequest) Validate() error {
 	return nil
 }
 
+// @Summary Delete account
+// @Tags account
+// @Description Update account
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.UpdateAccountRequest true "Account"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /account/ [put]
 func (ar *accountRouter) updateAccount(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req updateAccountRequest
@@ -179,6 +209,16 @@ func (req *deleteAccountRequest) Validate() error {
 	return nil
 }
 
+// @Summary Delete
+// @Tags account
+// @Description Delete account
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.DeleteAccountRequest true "Account"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /account/ [delete]
 func (ar *accountRouter) deleteAccount(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req deleteAccountRequest
