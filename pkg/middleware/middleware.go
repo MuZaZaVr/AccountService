@@ -6,13 +6,24 @@ import (
 	"net/http"
 )
 
+// SwagError represents struct for swagger errors.
+type SwagError struct {
+	Message string `json:"message"`
+}
+
+// SwagEmptyError represents struct for empty swagger error.
+type SwagEmptyError struct {
+}
+
+/* JSON Request */
 type request interface {
 	Build(r *http.Request) error
 	Validate() error
 }
 
 func ParseRequest(r *http.Request, req request) error {
-	err := req.Build(r); if err != nil {
+	err := req.Build(r)
+	if err != nil {
 		return err
 	}
 	return req.Validate()
@@ -30,7 +41,6 @@ func JSONReturn(w http.ResponseWriter, statusCode int, jsonObject interface{}) {
 func JSONError(w http.ResponseWriter, statusCode int, err error) {
 	JSONReturn(w, statusCode, err)
 }
-
 
 func Empty(w http.ResponseWriter, statusCode int) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")

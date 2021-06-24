@@ -3,7 +3,7 @@ package mongo
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Credential struct {
-	ID primitive.ObjectID `bson:"_id"`
+	ID primitive.ObjectID `bson:"_id,omitempty"`
 
 	Login        string `bson:"login"`
 	PasswordHash string `bson:"password_hash"`

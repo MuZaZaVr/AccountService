@@ -9,3 +9,6 @@ test-coverage:
 
 .PHONY lint:
 	golangci-lint run --config .golangci.yml
+
+swagger:
+	 swag init -g cmd/main.go

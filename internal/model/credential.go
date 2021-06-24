@@ -17,7 +17,7 @@ type CredentialsDTO []CredentialDTO
 
 // CredentialDTO represents DTO structure fot mongo.Credential
 type CredentialDTO struct {
-	ID string `json:"id"`
+	ID string `json:"id,omitempty"`
 
 	Login        string `json:"login"`
 	PasswordHash string `json:"password_hash"`
