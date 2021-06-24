@@ -28,7 +28,7 @@ func newCompanyRouter(services *service.Services, manager auth.TokenManager) com
 
 	handler.Path("/create").Methods(http.MethodPost).HandlerFunc(handler.createCompany)
 
-	handler.Path("/find/name").Methods(http.MethodGet).HandlerFunc(handler.createCompany)
+	handler.Path("/find/name").Methods(http.MethodGet).HandlerFunc(handler.findByName)
 	handler.Path("/find/URL").Methods(http.MethodGet).HandlerFunc(handler.findByURL)
 
 	handler.Path("/update/name").Methods(http.MethodPut).HandlerFunc(handler.updateName)
@@ -68,16 +68,16 @@ func (req *createCompanyRequest) Validate() error {
 	return nil
 }
 
-// @Summary CreateCompany
+// @Summary Create company
 // @Tags company
 // @Description Create company
 // @Accept  json
 // @Produce  json
-// @Param company body request.CreateCompanyRequest true "Company"
+// @Param purchase body request.CreateCompanyRequest true "Company"
 // @Success 200 {string} string id
 // @Failure 400 {object} middleware.SwagError
 // @Failure 500 {object} middleware.SwagError
-// @Router /company/ [post]
+// @Router /company/create/ [post]
 func (cr *companyRouter) createCompany(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req createCompanyRequest
@@ -120,6 +120,16 @@ func (req *findCompanyByNameRequest) Validate() error {
 	return nil
 }
 
+// @Summary Find company by name
+// @Tags company
+// @Description Find company by provided name
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.FindCompanyByNameRequest true "Company"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /company/find/name [get]
 func (cr companyRouter) findByName(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req findCompanyByNameRequest
@@ -160,6 +170,16 @@ func (req *findCompanyByURLRequest) Validate() error {
 	return nil
 }
 
+// @Summary Find company by URL
+// @Tags company
+// @Description Find company by provided URL
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.FindCompanyByURLRequest true "Company"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /company/find/url [get]
 func (cr companyRouter) findByURL(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req findCompanyByURLRequest
@@ -205,6 +225,16 @@ func (req *updateCompanyNameRequest) Validate() error {
 	return nil
 }
 
+// @Summary Update company's name
+// @Tags company
+// @Description Updates company name by ID
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.UpdateCompanyNameRequest true "Company"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /company/update/name/ [put]
 func (cr *companyRouter) updateName(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req updateCompanyNameRequest
@@ -252,6 +282,16 @@ func (req *updateCompanyDescriptionRequest) Validate() error {
 	return nil
 }
 
+// @Summary Update company's description
+// @Tags company
+// @Description Updates company description by ID
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.UpdateCompanyDescriptionRequest true "Company"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /company/update/description/ [put]
 func (cr *companyRouter) updateDescription(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req updateCompanyDescriptionRequest
@@ -299,6 +339,16 @@ func (req *updateCompanyURLRequest) Validate() error {
 	return nil
 }
 
+// @Summary Update company's URL
+// @Tags company
+// @Description Updates company URL by ID
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.UpdateCompanyURLRequest true "Company"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /company/update/url/ [put]
 func (cr *companyRouter) updateURL(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req updateCompanyURLRequest
@@ -341,6 +391,16 @@ func (req *deleteCompanyRequest) Validate() error {
 	return nil
 }
 
+// @Summary Delete company
+// @Tags company
+// @Description Deletes company by ID
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.DeleteCompanyRequest true "Company"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /company/delete/ [delete]
 func (cr *companyRouter) delete(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req deleteCompanyRequest

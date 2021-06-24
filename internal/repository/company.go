@@ -2,8 +2,9 @@ package repository
 
 import (
 	"context"
-	"errors"
 	"github.com/MuZaZaVr/account-service/internal/model"
+	"github.com/MuZaZaVr/account-service/internal/model/converter"
+	"github.com/MuZaZaVr/account-service/pkg/database/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	mongoDriver "go.mongodb.org/mongo-driver/mongo"
@@ -26,13 +27,13 @@ func NewCompanyRepository(db *mongoDriver.Database) *CompanyRepository {
 
 // Create func used to create new Company and returns CompanyID
 func (c CompanyRepository) Create(ctx context.Context, company model.CompanyDTO) (string, error) {
-	mongoCompanyModel, err := company.ConvertFromDTOToMongoModel()
-
+	var convertedCompany mongo.Company
+	err := converter.ConvertCompanyFromDTOToMongo(company, &convertedCompany)
 	if err != nil {
 		return "", err
 	}
 
-	result, err := c.db.InsertOne(ctx, mongoCompanyModel)
+	result, err := c.db.InsertOne(ctx, convertedCompany)
 	if err != nil {
 		return "", err
 	}
@@ -42,11 +43,7 @@ func (c CompanyRepository) Create(ctx context.Context, company model.CompanyDTO)
 
 // FindByName func used to find Company and returns model.CompanyDTO
 func (c CompanyRepository) FindByName(ctx context.Context, name string) (*model.CompanyDTO, error) {
-	var mongoCompany model.Company
-
-	if name == "" {
-		return nil, errors.New("empty company name")
-	}
+	var mongoCompany mongo.Company
 
 	query := bson.M{"name": name}
 	err := c.db.FindOne(ctx, query).Decode(&mongoCompany)
@@ -54,18 +51,15 @@ func (c CompanyRepository) FindByName(ctx context.Context, name string) (*model.
 		return nil, err
 	}
 
-	companyDTO := mongoCompany.ConvertFromMongoModelToDTO()
+	var convertedCompany model.CompanyDTO
+	converter.ConvertCompanyFromMongoToDTO(mongoCompany, &convertedCompany)
 
-	return companyDTO, nil
+	return &convertedCompany, nil
 }
 
 // FindByURL func used to find Company and returns model.CompanyDTO
 func (c CompanyRepository) FindByURL(ctx context.Context, url string) (*model.CompanyDTO, error) {
-	var mongoCompany model.Company
-
-	if url == "" {
-		return nil, errors.New("empty company URL")
-	}
+	var mongoCompany mongo.Company
 
 	query := bson.M{"URL": url}
 	err := c.db.FindOne(ctx, query).Decode(&mongoCompany)
@@ -73,9 +67,10 @@ func (c CompanyRepository) FindByURL(ctx context.Context, url string) (*model.Co
 		return nil, err
 	}
 
-	companyDTO := mongoCompany.ConvertFromMongoModelToDTO()
+	var convertedCompany model.CompanyDTO
+	converter.ConvertCompanyFromMongoToDTO(mongoCompany, &convertedCompany)
 
-	return companyDTO, nil
+	return &convertedCompany, nil
 }
 
 // UpdateName func used to update Company's name and returns updated CompanyID
@@ -88,7 +83,7 @@ func (c CompanyRepository) UpdateName(ctx context.Context, id string, newName st
 	filterQuery := bson.M{"_id": convertedID}
 	queryQuery := bson.D{{"$set", bson.D{{"name", newName}}}}
 
-	var updatedCompany model.Company
+	var updatedCompany mongo.Company
 	err = c.db.FindOneAndUpdate(ctx, filterQuery, queryQuery).Decode(&updatedCompany)
 	if err != nil {
 		return "", err
@@ -107,7 +102,7 @@ func (c CompanyRepository) UpdateDescription(ctx context.Context, id string, new
 	filerQuery := bson.M{"_id": convertedID}
 	updateQuery := bson.D{{"$set", bson.D{{"description", newDescription}}}}
 
-	var updatedCompany model.Company
+	var updatedCompany mongo.Company
 	err = c.db.FindOneAndUpdate(ctx, filerQuery, updateQuery).Decode(&updatedCompany)
 	if err != nil {
 		return "", err
@@ -126,7 +121,7 @@ func (c CompanyRepository) UpdateURL(ctx context.Context, id string, newUrl stri
 	filterQuery := bson.M{"_id": convertedId}
 	updateQuery := bson.D{{"$set", bson.D{{"URL", newUrl}}}}
 
-	var updatedCompany model.Company
+	var updatedCompany mongo.Company
 	err = c.db.FindOneAndUpdate(ctx, filterQuery, updateQuery).Decode(&updatedCompany)
 	if err != nil {
 		return "", err
@@ -145,7 +140,7 @@ func (c CompanyRepository) Delete(ctx context.Context, id string) (string, error
 	}
 
 	query := bson.M{"_id": convertedID}
-	var deletedDocument model.Company
+	var deletedDocument mongo.Company
 	err = c.db.FindOneAndDelete(ctx, query, opts).Decode(&deletedDocument)
 	if err != nil {
 		return "", err

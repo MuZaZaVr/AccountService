@@ -58,12 +58,12 @@ func (_m *Account) Delete(ctx context.Context, req request.DeleteAccountRequest)
 	return r0, r1
 }
 
-// FindAllByCompanyID provides a mock function with given fields: ctx, req
-func (_m *Account) FindAllByCompanyID(ctx context.Context, req request.FindAllAccountsByCompanyIDRequest) ([]model.AccountDTO, error) {
+// FindAccountsByCredentialsAddress provides a mock function with given fields: ctx, req
+func (_m *Account) FindAccountsByCredentialsAddress(ctx context.Context, req request.FindAccountsByCredentialAddressRequest) ([]model.AccountDTO, error) {
 	ret := _m.Called(ctx, req)
 
 	var r0 []model.AccountDTO
-	if rf, ok := ret.Get(0).(func(context.Context, request.FindAllAccountsByCompanyIDRequest) []model.AccountDTO); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, request.FindAccountsByCredentialAddressRequest) []model.AccountDTO); ok {
 		r0 = rf(ctx, req)
 	} else {
 		if ret.Get(0) != nil {
@@ -72,7 +72,7 @@ func (_m *Account) FindAllByCompanyID(ctx context.Context, req request.FindAllAc
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, request.FindAllAccountsByCompanyIDRequest) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, request.FindAccountsByCredentialAddressRequest) error); ok {
 		r1 = rf(ctx, req)
 	} else {
 		r1 = ret.Error(1)
@@ -81,12 +81,12 @@ func (_m *Account) FindAllByCompanyID(ctx context.Context, req request.FindAllAc
 	return r0, r1
 }
 
-// FindAllByUserID provides a mock function with given fields: ctx, req
-func (_m *Account) FindAllByUserID(ctx context.Context, req request.FindAllAccountsByUserIDRequest) ([]model.AccountDTO, error) {
+// FindAccountsByCredentialsAge provides a mock function with given fields: ctx, req
+func (_m *Account) FindAccountsByCredentialsAge(ctx context.Context, req request.FindAccountsByCredentialAgeRequest) ([]model.AccountDTO, error) {
 	ret := _m.Called(ctx, req)
 
 	var r0 []model.AccountDTO
-	if rf, ok := ret.Get(0).(func(context.Context, request.FindAllAccountsByUserIDRequest) []model.AccountDTO); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, request.FindAccountsByCredentialAgeRequest) []model.AccountDTO); ok {
 		r0 = rf(ctx, req)
 	} else {
 		if ret.Get(0) != nil {
@@ -95,7 +95,7 @@ func (_m *Account) FindAllByUserID(ctx context.Context, req request.FindAllAccou
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, request.FindAllAccountsByUserIDRequest) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, request.FindAccountsByCredentialAgeRequest) error); ok {
 		r1 = rf(ctx, req)
 	} else {
 		r1 = ret.Error(1)
@@ -104,8 +104,31 @@ func (_m *Account) FindAllByUserID(ctx context.Context, req request.FindAllAccou
 	return r0, r1
 }
 
-// FindByCredentialEmail provides a mock function with given fields: ctx, req
-func (_m *Account) FindByCredentialEmail(ctx context.Context, req request.FindAccountsByCredentialEmailRequest) ([]model.AccountDTO, error) {
+// FindAccountsByCredentialsCity provides a mock function with given fields: ctx, req
+func (_m *Account) FindAccountsByCredentialsCity(ctx context.Context, req request.FindAccountsByCredentialCityRequest) ([]model.AccountDTO, error) {
+	ret := _m.Called(ctx, req)
+
+	var r0 []model.AccountDTO
+	if rf, ok := ret.Get(0).(func(context.Context, request.FindAccountsByCredentialCityRequest) []model.AccountDTO); ok {
+		r0 = rf(ctx, req)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]model.AccountDTO)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, request.FindAccountsByCredentialCityRequest) error); ok {
+		r1 = rf(ctx, req)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// FindAccountsByCredentialsEmail provides a mock function with given fields: ctx, req
+func (_m *Account) FindAccountsByCredentialsEmail(ctx context.Context, req request.FindAccountsByCredentialEmailRequest) ([]model.AccountDTO, error) {
 	ret := _m.Called(ctx, req)
 
 	var r0 []model.AccountDTO
@@ -127,8 +150,8 @@ func (_m *Account) FindByCredentialEmail(ctx context.Context, req request.FindAc
 	return r0, r1
 }
 
-// FindByCredentialLogin provides a mock function with given fields: ctx, req
-func (_m *Account) FindByCredentialLogin(ctx context.Context, req request.FindAccountsByCredentialLoginRequest) ([]model.AccountDTO, error) {
+// FindAccountsByCredentialsLogin provides a mock function with given fields: ctx, req
+func (_m *Account) FindAccountsByCredentialsLogin(ctx context.Context, req request.FindAccountsByCredentialLoginRequest) ([]model.AccountDTO, error) {
 	ret := _m.Called(ctx, req)
 
 	var r0 []model.AccountDTO
@@ -150,8 +173,8 @@ func (_m *Account) FindByCredentialLogin(ctx context.Context, req request.FindAc
 	return r0, r1
 }
 
-// FindByCredentialMiddlename provides a mock function with given fields: ctx, req
-func (_m *Account) FindByCredentialMiddlename(ctx context.Context, req request.FindAccountsByCredentialMiddlenameRequest) ([]model.AccountDTO, error) {
+// FindAccountsByCredentialsMiddlename provides a mock function with given fields: ctx, req
+func (_m *Account) FindAccountsByCredentialsMiddlename(ctx context.Context, req request.FindAccountsByCredentialMiddlenameRequest) ([]model.AccountDTO, error) {
 	ret := _m.Called(ctx, req)
 
 	var r0 []model.AccountDTO
@@ -173,8 +196,8 @@ func (_m *Account) FindByCredentialMiddlename(ctx context.Context, req request.F
 	return r0, r1
 }
 
-// FindByCredentialName provides a mock function with given fields: ctx, req
-func (_m *Account) FindByCredentialName(ctx context.Context, req request.FindAccountsByCredentialNameRequest) ([]model.AccountDTO, error) {
+// FindAccountsByCredentialsName provides a mock function with given fields: ctx, req
+func (_m *Account) FindAccountsByCredentialsName(ctx context.Context, req request.FindAccountsByCredentialNameRequest) ([]model.AccountDTO, error) {
 	ret := _m.Called(ctx, req)
 
 	var r0 []model.AccountDTO
@@ -196,8 +219,8 @@ func (_m *Account) FindByCredentialName(ctx context.Context, req request.FindAcc
 	return r0, r1
 }
 
-// FindByCredentialPhone provides a mock function with given fields: ctx, req
-func (_m *Account) FindByCredentialPhone(ctx context.Context, req request.FindAccountsByCredentialPhoneRequest) ([]model.AccountDTO, error) {
+// FindAccountsByCredentialsPhone provides a mock function with given fields: ctx, req
+func (_m *Account) FindAccountsByCredentialsPhone(ctx context.Context, req request.FindAccountsByCredentialPhoneRequest) ([]model.AccountDTO, error) {
 	ret := _m.Called(ctx, req)
 
 	var r0 []model.AccountDTO
@@ -219,8 +242,8 @@ func (_m *Account) FindByCredentialPhone(ctx context.Context, req request.FindAc
 	return r0, r1
 }
 
-// FindByCredentialSurname provides a mock function with given fields: ctx, req
-func (_m *Account) FindByCredentialSurname(ctx context.Context, req request.FindAccountsByCredentialSurnameRequest) ([]model.AccountDTO, error) {
+// FindAccountsByCredentialsSurname provides a mock function with given fields: ctx, req
+func (_m *Account) FindAccountsByCredentialsSurname(ctx context.Context, req request.FindAccountsByCredentialSurnameRequest) ([]model.AccountDTO, error) {
 	ret := _m.Called(ctx, req)
 
 	var r0 []model.AccountDTO
@@ -234,6 +257,29 @@ func (_m *Account) FindByCredentialSurname(ctx context.Context, req request.Find
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(context.Context, request.FindAccountsByCredentialSurnameRequest) error); ok {
+		r1 = rf(ctx, req)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// FindAccountsByUserID provides a mock function with given fields: ctx, req
+func (_m *Account) FindAccountsByUserID(ctx context.Context, req request.FindAllAccountsByUserIDRequest) ([]model.AccountDTO, error) {
+	ret := _m.Called(ctx, req)
+
+	var r0 []model.AccountDTO
+	if rf, ok := ret.Get(0).(func(context.Context, request.FindAllAccountsByUserIDRequest) []model.AccountDTO); ok {
+		r0 = rf(ctx, req)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]model.AccountDTO)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, request.FindAllAccountsByUserIDRequest) error); ok {
 		r1 = rf(ctx, req)
 	} else {
 		r1 = ret.Error(1)
@@ -265,145 +311,19 @@ func (_m *Account) FindByName(ctx context.Context, req request.FindAccountByName
 	return r0, r1
 }
 
-// UpdateCredentialEmail provides a mock function with given fields: ctx, req
-func (_m *Account) UpdateCredentialEmail(ctx context.Context, req request.UpdateAccountCredentialEmailRequest) (string, error) {
+// Update provides a mock function with given fields: ctx, req
+func (_m *Account) Update(ctx context.Context, req request.UpdateAccountRequest) (string, error) {
 	ret := _m.Called(ctx, req)
 
 	var r0 string
-	if rf, ok := ret.Get(0).(func(context.Context, request.UpdateAccountCredentialEmailRequest) string); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, request.UpdateAccountRequest) string); ok {
 		r0 = rf(ctx, req)
 	} else {
 		r0 = ret.Get(0).(string)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, request.UpdateAccountCredentialEmailRequest) error); ok {
-		r1 = rf(ctx, req)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// UpdateCredentialLogin provides a mock function with given fields: ctx, req
-func (_m *Account) UpdateCredentialLogin(ctx context.Context, req request.UpdateAccountCredentialLoginRequest) (string, error) {
-	ret := _m.Called(ctx, req)
-
-	var r0 string
-	if rf, ok := ret.Get(0).(func(context.Context, request.UpdateAccountCredentialLoginRequest) string); ok {
-		r0 = rf(ctx, req)
-	} else {
-		r0 = ret.Get(0).(string)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, request.UpdateAccountCredentialLoginRequest) error); ok {
-		r1 = rf(ctx, req)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// UpdateCredentialMiddlename provides a mock function with given fields: ctx, req
-func (_m *Account) UpdateCredentialMiddlename(ctx context.Context, req request.UpdateAccountCredentialMiddlenameRequest) (string, error) {
-	ret := _m.Called(ctx, req)
-
-	var r0 string
-	if rf, ok := ret.Get(0).(func(context.Context, request.UpdateAccountCredentialMiddlenameRequest) string); ok {
-		r0 = rf(ctx, req)
-	} else {
-		r0 = ret.Get(0).(string)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, request.UpdateAccountCredentialMiddlenameRequest) error); ok {
-		r1 = rf(ctx, req)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// UpdateCredentialName provides a mock function with given fields: ctx, req
-func (_m *Account) UpdateCredentialName(ctx context.Context, req request.UpdateAccountCredentialNameRequest) (string, error) {
-	ret := _m.Called(ctx, req)
-
-	var r0 string
-	if rf, ok := ret.Get(0).(func(context.Context, request.UpdateAccountCredentialNameRequest) string); ok {
-		r0 = rf(ctx, req)
-	} else {
-		r0 = ret.Get(0).(string)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, request.UpdateAccountCredentialNameRequest) error); ok {
-		r1 = rf(ctx, req)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// UpdateCredentialPhone provides a mock function with given fields: ctx, req
-func (_m *Account) UpdateCredentialPhone(ctx context.Context, req request.UpdateAccountCredentialPhoneRequest) (string, error) {
-	ret := _m.Called(ctx, req)
-
-	var r0 string
-	if rf, ok := ret.Get(0).(func(context.Context, request.UpdateAccountCredentialPhoneRequest) string); ok {
-		r0 = rf(ctx, req)
-	} else {
-		r0 = ret.Get(0).(string)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, request.UpdateAccountCredentialPhoneRequest) error); ok {
-		r1 = rf(ctx, req)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// UpdateCredentialSurname provides a mock function with given fields: ctx, req
-func (_m *Account) UpdateCredentialSurname(ctx context.Context, req request.UpdateAccountCredentialSurnameRequest) (string, error) {
-	ret := _m.Called(ctx, req)
-
-	var r0 string
-	if rf, ok := ret.Get(0).(func(context.Context, request.UpdateAccountCredentialSurnameRequest) string); ok {
-		r0 = rf(ctx, req)
-	} else {
-		r0 = ret.Get(0).(string)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, request.UpdateAccountCredentialSurnameRequest) error); ok {
-		r1 = rf(ctx, req)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// UpdateDescription provides a mock function with given fields: ctx, req
-func (_m *Account) UpdateDescription(ctx context.Context, req request.UpdateCompanyDescriptionRequest) (string, error) {
-	ret := _m.Called(ctx, req)
-
-	var r0 string
-	if rf, ok := ret.Get(0).(func(context.Context, request.UpdateCompanyDescriptionRequest) string); ok {
-		r0 = rf(ctx, req)
-	} else {
-		r0 = ret.Get(0).(string)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, request.UpdateCompanyDescriptionRequest) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, request.UpdateAccountRequest) error); ok {
 		r1 = rf(ctx, req)
 	} else {
 		r1 = ret.Error(1)

@@ -1,5 +1,7 @@
 package request
 
+import "github.com/MuZaZaVr/account-service/internal/model"
+
 type (
 	CreateAccountRequest struct {
 		Name        string
@@ -7,8 +9,8 @@ type (
 
 		UserID int
 
-		CompanyID    string
-		CredentialID string
+		Company    model.CompanyDTO
+		Credential model.CredentialsDTO
 	}
 
 	DeleteAccountRequest struct {
@@ -43,6 +45,18 @@ type (
 		CredentialSurname string
 	}
 
+	FindAccountsByCredentialAgeRequest struct {
+		CredentialAge int
+	}
+
+	FindAccountsByCredentialCityRequest struct {
+		CredentialCity string
+	}
+
+	FindAccountsByCredentialAddressRequest struct {
+		CredentialAddress string
+	}
+
 	FindAllAccountsByCompanyIDRequest struct {
 		CompanyID string
 	}
@@ -51,33 +65,8 @@ type (
 		UserID int
 	}
 
-	UpdateAccountCredentialLoginRequest struct {
-		ID                 string
-		NewCredentialLogin string
-	}
-
-	UpdateAccountCredentialEmailRequest struct {
-		ID                 string
-		NewCredentialEmail string
-	}
-
-	UpdateAccountCredentialPhoneRequest struct {
-		ID                 string
-		NewCredentialPhone string
-	}
-
-	UpdateAccountCredentialNameRequest struct {
-		ID                string
-		NewCredentialName string
-	}
-
-	UpdateAccountCredentialMiddlenameRequest struct {
-		ID                      string
-		NewCredentialMiddlename string
-	}
-
-	UpdateAccountCredentialSurnameRequest struct {
-		ID                   string
-		NewCredentialSurname string
+	UpdateAccountRequest struct {
+		ID             string
+		UpdatedAccount model.AccountDTO
 	}
 )

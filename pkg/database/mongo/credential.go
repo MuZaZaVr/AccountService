@@ -1,10 +1,6 @@
 package mongo
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
-
-type Credential struct {
-	ID primitive.ObjectID `bson:"_id,omitempty"`
-
+type Credentials struct {
 	Login        string `bson:"login"`
 	PasswordHash string `bson:"password_hash"`
 	Email        string `bson:"email"`

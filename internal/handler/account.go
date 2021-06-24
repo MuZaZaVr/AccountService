@@ -27,11 +27,11 @@ func newAccountHandler(services *service.Services, manager auth.TokenManager) ac
 		manager:  manager,
 	}
 
-	handler.Path("/create").Methods(http.MethodPost).HandlerFunc(handler.createAccount)
+	handler.Path("/find/one/name").Methods(http.MethodGet).HandlerFunc(handler.findAccountByName)
 
-	handler.Path("/find/name").Methods(http.MethodGet).HandlerFunc(handler.findAccountByName)
-
-	handler.Path("/delete").Methods(http.MethodDelete).HandlerFunc(handler.deleteAccount)
+	handler.Path("/").Methods(http.MethodPost).HandlerFunc(handler.createAccount)
+	handler.Path("/").Methods(http.MethodPut).HandlerFunc(handler.updateAccount)
+	handler.Path("/").Methods(http.MethodDelete).HandlerFunc(handler.deleteAccount)
 
 	return handler
 }
@@ -54,10 +54,6 @@ func (req createAccountRequest) Validate() error {
 		return fmt.Errorf("company name can not be nil")
 	}
 
-	if req.CompanyID == "" {
-		return fmt.Errorf("not valid company ID")
-	}
-
 	if req.UserID < 0 && req.UserID == 0 {
 		return fmt.Errorf("not valid user ID")
 	}
@@ -65,6 +61,16 @@ func (req createAccountRequest) Validate() error {
 	return nil
 }
 
+// @Summary Create account
+// @Tags account
+// @Description Create account
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.CreateAccountRequest true "Account"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /account/ [post]
 func (ar *accountRouter) createAccount(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req createAccountRequest
@@ -97,12 +103,22 @@ func (req *findByNameRequest) Build(r *http.Request) error {
 
 func (req findByNameRequest) Validate() error {
 	if req.Name == "" {
-		return fmt.Errorf("company name can not be nil")
+		return fmt.Errorf("account name can not be nil")
 	}
 
 	return nil
 }
 
+// @Summary Find account by name
+// @Tags account
+// @Description Find account by provided account name
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.FindAccountByNameRequest true "Account"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /account/ [put]
 func (ar *accountRouter) findAccountByName(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req findByNameRequest
@@ -113,6 +129,58 @@ func (ar *accountRouter) findAccountByName(w http.ResponseWriter, r *http.Reques
 	}
 
 	id, err := ar.services.AccountService.FindByName(ctx, req.FindAccountByNameRequest)
+	if err != nil {
+		middleware.JSONError(w, http.StatusInternalServerError, err)
+	}
+
+	middleware.JSONReturn(w, http.StatusOK, id)
+}
+
+type updateAccountRequest struct {
+	request.UpdateAccountRequest
+}
+
+func (req *updateAccountRequest) Build(r *http.Request) error {
+	err := json.NewDecoder(r.Body).Decode(&req.UpdateAccountRequest)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (req *updateAccountRequest) Validate() error {
+	if req.ID == "" {
+		return fmt.Errorf("account ID can not be nil")
+	}
+
+	if req.UpdatedAccount.UserId < 0 && req.UpdatedAccount.UserId == 0 {
+		return fmt.Errorf("not valid user ID")
+	}
+
+	return nil
+}
+
+// @Summary Delete account
+// @Tags account
+// @Description Update account
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.UpdateAccountRequest true "Account"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /account/ [put]
+func (ar *accountRouter) updateAccount(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+	var req updateAccountRequest
+
+	err := middleware.ParseRequest(r, &req)
+	if err != nil {
+		middleware.JSONError(w, http.StatusBadRequest, err)
+	}
+
+	id, err := ar.services.AccountService.Update(ctx, req.UpdateAccountRequest)
 	if err != nil {
 		middleware.JSONError(w, http.StatusInternalServerError, err)
 	}
@@ -141,6 +209,16 @@ func (req *deleteAccountRequest) Validate() error {
 	return nil
 }
 
+// @Summary Delete
+// @Tags account
+// @Description Delete account
+// @Accept  json
+// @Produce  json
+// @Param purchase body request.DeleteAccountRequest true "Account"
+// @Success 200 {string} string id
+// @Failure 400 {object} middleware.SwagError
+// @Failure 500 {object} middleware.SwagError
+// @Router /account/ [delete]
 func (ar *accountRouter) deleteAccount(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req deleteAccountRequest

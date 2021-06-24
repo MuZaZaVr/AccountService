@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/MuZaZaVr/account-service/internal/config"
 	"github.com/MuZaZaVr/account-service/internal/handler"
+	"github.com/MuZaZaVr/account-service/internal/handler/swagger"
 	"github.com/MuZaZaVr/account-service/internal/repository"
 	"github.com/MuZaZaVr/account-service/internal/server"
 	"github.com/MuZaZaVr/account-service/internal/service"
@@ -57,6 +58,8 @@ func Run(configPath string) {
 
 	some := newHandler.GetRoute("companyRouter").GetHandler()
 	log.Printf("Initialize handler: %v", some)
+
+	swagger.HandlerSwagger(newHandler)
 
 	/* Server */
 	newServer := server.NewServer(cfg, newHandler)
