@@ -9,8 +9,8 @@ type (
 
 		UserID int
 
-		Company     model.CompanyDTO
-		Credentials model.CredentialDTO
+		Company    model.CompanyDTO
+		Credential model.CredentialsDTO
 	}
 
 	DeleteAccountRequest struct {
