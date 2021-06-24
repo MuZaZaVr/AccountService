@@ -9,7 +9,6 @@ import (
 const (
 	accountPathPrefix = "/account"
 	companyPathPrefix = "/company"
-	credentialPathPrefix = "/credential"
 )
 
 type API struct {
@@ -21,16 +20,13 @@ func NewHandler(services *service.Services, tokenManager auth.TokenManager) *API
 		mux.NewRouter(),
 	}
 
-	api.PathPrefix(companyPathPrefix).
-		Handler(newCompanyRouter(services, tokenManager)).
-		Name("companyRouter")
-
 	api.PathPrefix(accountPathPrefix).
 		Handler(newAccountHandler(services, tokenManager)).
 		Name("accountRouter")
 
-	api.PathPrefix(credentialPathPrefix).
-		Handler(NewCredentialRouter(services, tokenManager)).
-		Name("credentialRouter")
+	api.PathPrefix(companyPathPrefix).
+		Handler(newCompanyRouter(services, tokenManager)).
+		Name("companyRouter")
+
 	return &api
 }

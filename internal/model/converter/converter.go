@@ -7,13 +7,16 @@ import (
 )
 
 func ConvertAccountFromDTOToMongo(dto model.AccountDTO, target *mongo.Account) error {
-	convertedAccountID, err := primitive.ObjectIDFromHex(dto.ID)
-	if err != nil {
-		return err
+	if dto.ID != "" {
+		convertedAccountID, err := primitive.ObjectIDFromHex(dto.ID)
+		if err != nil {
+			return err
+		}
+		target.ID = convertedAccountID
 	}
 
 	var convertedCompany mongo.Company
-	err = ConvertCompanyFromDTOToMongo(dto.Company, &convertedCompany)
+	err := ConvertCompanyFromDTOToMongo(dto.Company, &convertedCompany)
 	if err != nil {
 		return err
 	}
@@ -21,7 +24,7 @@ func ConvertAccountFromDTOToMongo(dto model.AccountDTO, target *mongo.Account) e
 	var convertedCredentials mongo.Credentials
 	ConvertCredentialsFromDTOToMongo(dto.Credentials, &convertedCredentials)
 
-	target.ID = convertedAccountID
+
 	target.Name = dto.Name
 	target.Description = dto.Description
 	target.UserId = dto.UserId
@@ -66,7 +69,6 @@ func ConvertFewAccountsFromDTOToMongo(dtos []model.AccountDTO) ([]mongo.Account,
 func ConvertFewAccountsFromMongoToDTO(mongos []mongo.Account) ([]model.AccountDTO, error) {
 	var target []model.AccountDTO
 	var convertedAccount model.AccountDTO
-
 	for _, dto := range mongos {
 		ConvertAccountFromMongoToDTO(dto, &convertedAccount)
 		target = append(target, convertedAccount)
@@ -76,12 +78,13 @@ func ConvertFewAccountsFromMongoToDTO(mongos []mongo.Account) ([]model.AccountDT
 }
 
 func ConvertCompanyFromDTOToMongo(dto model.CompanyDTO, target *mongo.Company) error {
-	convertedID, err := primitive.ObjectIDFromHex(dto.ID)
-	if err != nil {
-		return err
+	if dto.ID != "" {
+		convertedID, err := primitive.ObjectIDFromHex(dto.ID)
+		if err != nil {
+			return err
+		}
+		target.ID = convertedID
 	}
-
-	target.ID = convertedID
 	target.Name = dto.Name
 	target.Description = dto.Description
 	target.URL = dto.URL

@@ -27,11 +27,11 @@ func newAccountHandler(services *service.Services, manager auth.TokenManager) ac
 		manager:  manager,
 	}
 
-	handler.Path("/create").Methods(http.MethodPost).HandlerFunc(handler.createAccount)
+	handler.Path("/find/one/name").Methods(http.MethodGet).HandlerFunc(handler.findAccountByName)
 
-	handler.Path("/find/name").Methods(http.MethodGet).HandlerFunc(handler.findAccountByName)
-
-	handler.Path("/delete").Methods(http.MethodDelete).HandlerFunc(handler.deleteAccount)
+	handler.Path("/").Methods(http.MethodPost).HandlerFunc(handler.createAccount)
+	handler.Path("/").Methods(http.MethodPut).HandlerFunc(handler.updateAccount)
+	handler.Path("/").Methods(http.MethodDelete).HandlerFunc(handler.deleteAccount)
 
 	return handler
 }
@@ -52,10 +52,6 @@ func (req *createAccountRequest) Build(r *http.Request) error {
 func (req createAccountRequest) Validate() error {
 	if req.Name == "" {
 		return fmt.Errorf("company name can not be nil")
-	}
-
-	if req.CompanyID == "" {
-		return fmt.Errorf("not valid company ID")
 	}
 
 	if req.UserID < 0 && req.UserID == 0 {
@@ -97,7 +93,7 @@ func (req *findByNameRequest) Build(r *http.Request) error {
 
 func (req findByNameRequest) Validate() error {
 	if req.Name == "" {
-		return fmt.Errorf("company name can not be nil")
+		return fmt.Errorf("account name can not be nil")
 	}
 
 	return nil
@@ -113,6 +109,48 @@ func (ar *accountRouter) findAccountByName(w http.ResponseWriter, r *http.Reques
 	}
 
 	id, err := ar.services.AccountService.FindByName(ctx, req.FindAccountByNameRequest)
+	if err != nil {
+		middleware.JSONError(w, http.StatusInternalServerError, err)
+	}
+
+	middleware.JSONReturn(w, http.StatusOK, id)
+}
+
+type updateAccountRequest struct {
+	request.UpdateAccountRequest
+}
+
+func (req *updateAccountRequest) Build(r *http.Request) error {
+	err := json.NewDecoder(r.Body).Decode(&req.UpdateAccountRequest)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (req *updateAccountRequest) Validate() error {
+	if req.ID == "" {
+		return fmt.Errorf("account ID can not be nil")
+	}
+
+	if req.UpdatedAccount.UserId < 0 && req.UpdatedAccount.UserId == 0 {
+		return fmt.Errorf("not valid user ID")
+	}
+
+	return nil
+}
+
+func (ar *accountRouter) updateAccount(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+	var req updateAccountRequest
+
+	err := middleware.ParseRequest(r, &req)
+	if err != nil {
+		middleware.JSONError(w, http.StatusBadRequest, err)
+	}
+
+	id, err := ar.services.AccountService.Update(ctx, req.UpdateAccountRequest)
 	if err != nil {
 		middleware.JSONError(w, http.StatusInternalServerError, err)
 	}

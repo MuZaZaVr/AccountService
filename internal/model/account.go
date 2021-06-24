@@ -2,7 +2,7 @@ package model
 
 // AccountDTO represents DTO structure for mongo.Account
 type AccountDTO struct {
-	ID          string `json:"id"`
+	ID          string `json:"id,omitempty"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 

@@ -28,7 +28,7 @@ func newCompanyRouter(services *service.Services, manager auth.TokenManager) com
 
 	handler.Path("/create").Methods(http.MethodPost).HandlerFunc(handler.createCompany)
 
-	handler.Path("/find/name").Methods(http.MethodGet).HandlerFunc(handler.createCompany)
+	handler.Path("/find/name").Methods(http.MethodGet).HandlerFunc(handler.findByName)
 	handler.Path("/find/URL").Methods(http.MethodGet).HandlerFunc(handler.findByURL)
 
 	handler.Path("/update/name").Methods(http.MethodPut).HandlerFunc(handler.updateName)
@@ -68,16 +68,6 @@ func (req *createCompanyRequest) Validate() error {
 	return nil
 }
 
-// @Summary CreateCompany
-// @Tags company
-// @Description Create company
-// @Accept  json
-// @Produce  json
-// @Param company body request.CreateCompanyRequest true "Company"
-// @Success 200 {string} string id
-// @Failure 400 {object} middleware.SwagError
-// @Failure 500 {object} middleware.SwagError
-// @Router /company/ [post]
 func (cr *companyRouter) createCompany(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	var req createCompanyRequest
