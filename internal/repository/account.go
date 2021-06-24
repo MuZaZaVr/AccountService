@@ -3,19 +3,21 @@ package repository
 import (
 	"context"
 	"github.com/MuZaZaVr/account-service/internal/model"
+	"github.com/MuZaZaVr/account-service/internal/model/converter"
+	"github.com/MuZaZaVr/account-service/pkg/database/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
+	mongoDriver "go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 const dbAccountCollectionName = "account" //dbAccountCollectionName is a collection for mongo.Account struct in mongodb
 
 type AccountRepository struct {
-	db *mongo.Collection
+	db *mongoDriver.Collection
 }
 
-func NewAccountRepository(db *mongo.Database) *AccountRepository {
+func NewAccountRepository(db *mongoDriver.Database) *AccountRepository {
 	collection := db.Collection(dbAccountCollectionName)
 
 	return &AccountRepository{db: collection}
@@ -23,7 +25,8 @@ func NewAccountRepository(db *mongo.Database) *AccountRepository {
 
 // Create func used to create new Account and returns AccountID
 func (a AccountRepository) Create(ctx context.Context, account model.AccountDTO) (string, error) {
-	convertedAccount, err := account.ConvertFromDTOToMongoModel()
+	var convertedAccount mongo.Account
+	err := converter.ConvertAccountFromDTOToMongo(account, &convertedAccount)
 	if err != nil {
 		return "", err
 	}
@@ -40,70 +43,21 @@ func (a AccountRepository) Create(ctx context.Context, account model.AccountDTO)
 func (a AccountRepository) FindByName(ctx context.Context, name string) (*model.AccountDTO, error) {
 	filterQuery := bson.M{"name": name}
 
-	var account model.Account
-	err := a.db.FindOne(ctx, filterQuery).Decode(&account)
+	var mongoAccount mongo.Account
+	err := a.db.FindOne(ctx, filterQuery).Decode(&mongoAccount)
 	if err != nil {
 		return nil, nil
 	}
 
-	convertedAccount := account.ConvertFromMongoModelToDTO()
+	var convertedAccount model.AccountDTO
+	converter.ConvertAccountFromMongoToDTO(mongoAccount, &convertedAccount)
 
-	return convertedAccount, nil
+	return &convertedAccount, nil
 }
 
-// FindByCredentialID func used to find Account by Credential ID and returns model.AccountDTO
-func (a AccountRepository) FindByCredentialID(ctx context.Context, id string) (*model.AccountDTO, error) {
-	var account model.Account
-
-	convertedID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-
-	err = a.db.FindOne(ctx, convertedID).Decode(&account)
-	if err != nil {
-		return nil, err
-	}
-
-	return account.ConvertFromMongoModelToDTO(), nil
-}
-
-// FindCredentialIDByAccountID func used to find Credential ID by Account ID and returns model.AccountDTO
-func (a AccountRepository) FindCredentialIDByAccountID(ctx context.Context, id string) (string, error) {
-	var credential model.Credential
-
-	filterQuery := bson.M{"_id": id}
-
-	err := a.db.FindOne(ctx, filterQuery).Decode(&credential)
-	if err != nil {
-		return "", err
-	}
-
-	return credential.ID.Hex(), nil
-}
-
-// FindAllByCompanyID func used to find all Accounts with such companyID and returns slice of model.AccountDTO
-func (a AccountRepository) FindAllByCompanyID(ctx context.Context, id string) ([]model.AccountDTO, error) {
-	var accounts model.Accounts
-
-	query := bson.M{"company_id": id}
-
-	result, err := a.db.Find(ctx, query)
-	if err != nil {
-		return nil, err
-	}
-
-	err = result.All(ctx, &accounts)
-	if err != nil {
-		return nil, err
-	}
-
-	return accounts.ConvertFewFromMongoModelsToDTO(), nil
-}
-
-// FindAllByUserID func used to find all Accounts with such userID and returns slice of model.AccountDTO
-func (a AccountRepository) FindAllByUserID(ctx context.Context, id int) ([]model.AccountDTO, error) {
-	var accounts model.Accounts
+// FindAccountsByUserID func used to find all Account's by provided id and returns []model.AccountDTO
+func (a AccountRepository) FindAccountsByUserID(ctx context.Context, id int) ([]model.AccountDTO, error) {
+	var accounts []mongo.Account
 
 	query := bson.M{"user_id": id}
 
@@ -117,62 +71,241 @@ func (a AccountRepository) FindAllByUserID(ctx context.Context, id int) ([]model
 		return nil, err
 	}
 
-	return accounts.ConvertFewFromMongoModelsToDTO(), err
+	convertedAccounts, err := converter.ConvertFewAccountsFromMongoToDTO(accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	return convertedAccounts, err
 }
 
-// UpdateName func used to update Account's name and returns updated AccountID
-func (a AccountRepository) UpdateName(ctx context.Context, id string, newName string) (string, error) {
+// FindAccountsByCredentialsLogin func used to find all Account's by provided credential login and returns []model.AccountDTO
+func (a AccountRepository) FindAccountsByCredentialsLogin(ctx context.Context, credentialsLogin string) ([]model.AccountDTO, error) {
+	var accounts []mongo.Account
+
+	query := bson.M{"credentials.login": credentialsLogin}
+
+	result, err := a.db.Find(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	err = result.All(ctx, &accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	convertedAccounts, err := converter.ConvertFewAccountsFromMongoToDTO(accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	return convertedAccounts, nil
+}
+
+// FindAccountsByCredentialsEmail func used to find all Account's by provided credential email and returns []model.AccountDTO
+func (a AccountRepository) FindAccountsByCredentialsEmail(ctx context.Context, credentialsEmail string) ([]model.AccountDTO, error) {
+	var accounts []mongo.Account
+
+	query := bson.M{"credentials.email": credentialsEmail}
+
+	result, err := a.db.Find(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	err = result.All(ctx, &accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	convertedAccounts, err := converter.ConvertFewAccountsFromMongoToDTO(accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	return convertedAccounts, nil
+}
+
+// FindAccountsByCredentialsPhone func used to find all Account's by provided credential phone and returns []model.AccountDTO
+func (a AccountRepository) FindAccountsByCredentialsPhone(ctx context.Context, credentialsPhone string) ([]model.AccountDTO, error) {
+	var accounts []mongo.Account
+
+	query := bson.M{"credentials.phone": credentialsPhone}
+
+	result, err := a.db.Find(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	err = result.All(ctx, &accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	convertedAccounts, err := converter.ConvertFewAccountsFromMongoToDTO(accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	return convertedAccounts, nil
+}
+
+// FindAccountsByCredentialsName func used to find all Account's by provided credential name and returns []model.AccountDTO
+func (a AccountRepository) FindAccountsByCredentialsName(ctx context.Context, credentialsName string) ([]model.AccountDTO, error) {
+	var accounts []mongo.Account
+
+	query := bson.M{"credentials.name": credentialsName}
+
+	result, err := a.db.Find(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	err = result.All(ctx, &accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	convertedAccounts, err := converter.ConvertFewAccountsFromMongoToDTO(accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	return convertedAccounts, nil
+}
+
+// FindAccountsByCredentialsMiddlename func used to find all Account's by provided credential middlename and returns []model.AccountDTO
+func (a AccountRepository) FindAccountsByCredentialsMiddlename(ctx context.Context, credentialsMiddlename string) ([]model.AccountDTO, error) {
+	var accounts []mongo.Account
+
+	query := bson.M{"credentials.middlename": credentialsMiddlename}
+
+	result, err := a.db.Find(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	err = result.All(ctx, &accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	convertedAccounts, err := converter.ConvertFewAccountsFromMongoToDTO(accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	return convertedAccounts, nil
+}
+
+// FindAccountsByCredentialsSurname func used to find all Account's by provided credential surname and returns []model.AccountDTO
+func (a AccountRepository) FindAccountsByCredentialsSurname(ctx context.Context, credentialsSurname string) ([]model.AccountDTO, error) {
+	var accounts []mongo.Account
+
+	query := bson.M{"credentials.surname": credentialsSurname}
+
+	result, err := a.db.Find(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	err = result.All(ctx, &accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	convertedAccounts, err := converter.ConvertFewAccountsFromMongoToDTO(accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	return convertedAccounts, nil
+}
+
+// FindAccountsByCredentialsAge func used to find all Account's by provided credential age and returns []model.AccountDTO
+func (a AccountRepository) FindAccountsByCredentialsAge(ctx context.Context, credentialsAge int) ([]model.AccountDTO, error) {
+	var accounts []mongo.Account
+
+	query := bson.M{"credentials.age": credentialsAge}
+
+	result, err := a.db.Find(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	err = result.All(ctx, &accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	convertedAccounts, err := converter.ConvertFewAccountsFromMongoToDTO(accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	return convertedAccounts, nil
+}
+
+// FindAccountsByCredentialsCity func used to find all Account's by provided credential city and returns []model.AccountDTO
+func (a AccountRepository) FindAccountsByCredentialsCity(ctx context.Context, credentialsCity string) ([]model.AccountDTO, error) {
+	var accounts []mongo.Account
+
+	query := bson.M{"credentials.city": credentialsCity}
+
+	result, err := a.db.Find(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	err = result.All(ctx, &accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	convertedAccounts, err := converter.ConvertFewAccountsFromMongoToDTO(accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	return convertedAccounts, nil
+}
+
+// FindAccountsByCredentialsAddress func used to find all Account's by provided credential address and returns []model.AccountDTO
+func (a AccountRepository) FindAccountsByCredentialsAddress(ctx context.Context, credentialsAddress string) ([]model.AccountDTO, error) {
+	var accounts []mongo.Account
+
+	query := bson.M{"credentials.address": credentialsAddress}
+
+	result, err := a.db.Find(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	err = result.All(ctx, &accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	convertedAccounts, err := converter.ConvertFewAccountsFromMongoToDTO(accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	return convertedAccounts, nil
+}
+
+// Update func used to update Account's name and returns updated AccountID
+func (a AccountRepository) Update(ctx context.Context, id string, newAccount model.AccountDTO) (string, error) {
 	convertedID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return "", err
 	}
 
 	filterQuery := bson.M{"_id": convertedID}
-	updateQuery := bson.D{{"$set", bson.D{{"name", newName}}}}
+	updateQuery := bson.M{"$set": newAccount}
 
-	var account model.Account
-	err = a.db.FindOneAndUpdate(ctx, filterQuery, updateQuery).Decode(&account)
-	if err != nil {
-		return "", err
-	}
-
-	return account.ID.Hex(), err
-}
-
-// UpdateDescription func used to update Account's description and returns updated AccountID
-func (a AccountRepository) UpdateDescription(ctx context.Context, id string, newDescription string) (string, error) {
-	convertedID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return "", err
-	}
-
-	filterQuery := bson.M{"_id": convertedID}
-	updateQuery := bson.D{{"$set", bson.D{{"description", newDescription}}}}
-
-	var account model.Account
-	err = a.db.FindOneAndUpdate(ctx, filterQuery, updateQuery).Decode(&account)
-	if err != nil {
-		return "", err
-	}
-
-	return account.ID.Hex(), err
-}
-
-// UpdateCompanyID func used to update Account's companyIS and returns updated AccountID
-func (a AccountRepository) UpdateCompanyID(ctx context.Context, id string, newCompanyId string) (string, error) {
-	convertedAccountID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return "", err
-	}
-	convertedCompanyID, err := primitive.ObjectIDFromHex(newCompanyId)
-	if err != nil {
-		return "", err
-	}
-
-	filterQuery := bson.M{"_id": convertedAccountID}
-	updateQuery := bson.D{{"$set", bson.D{{"company_id", convertedCompanyID}}}}
-
-	var account model.Account
+	var account mongo.Account
 	err = a.db.FindOneAndUpdate(ctx, filterQuery, updateQuery).Decode(&account)
 	if err != nil {
 		return "", err
@@ -192,7 +325,7 @@ func (a AccountRepository) Delete(ctx context.Context, id string) (string, error
 
 	filterQuery := bson.M{"_id": convertedId}
 
-	var company model.Company
+	var company mongo.Account
 	err = a.db.FindOneAndDelete(ctx, filterQuery, opts).Decode(&company)
 	if err != nil {
 		return "", err
